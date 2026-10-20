@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Список книг</title>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: 2rem auto; padding: 0 1rem; background: #f8f9fa; }
+    h1 { font-size: 1.5rem; text-align: center; }
+    .card { background: #fff; border-radius: 8px; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,.1); margin-bottom: 1rem; }
+    .row { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .75rem; }
+    .row input { flex: 1; min-width: 150px; padding: .5rem; border: 1px solid #ccc; border-radius: 4px; }
+    .row input.invalid { border-color: #dc3545; }
+    .row button { padding: .5rem 1rem; border: none; border-radius: 4px; background: #0d6efd; color: #fff; cursor: pointer; }
+    .feedback { color: #dc3545; font-size: .85rem; margin-top: .25rem; min-height: 1em; }
+    .filters { display: flex; gap: .5rem; margin-bottom: .75rem; }
+    .filters button { padding: .4rem .8rem; border: 1px solid #6c757d; background: #fff; border-radius: 4px; cursor: pointer; }
+    .filters button.active { background: #6c757d; color: #fff; }
+    .counters { display: flex; gap: .5rem; flex-wrap: wrap; font-size: .9rem; }
+    .badge { padding: .25rem .6rem; border-radius: 4px; background: #e9ecef; }
+    .badge.read { background: #d1e7dd; }
+    .badge.unread { background: #fff3cd; }
+    ul#book-list { list-style: none; padding: 0; margin: 0; }
+    .book-item { display: flex; align-items: flex-start; gap: .75rem; padding: .75rem; background: #fff; border-radius: 8px; margin-bottom: .5rem; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+    .book-item .book-info { flex: 1; min-width: 0; }
+    .book-item .book-title { font-weight: 600; word-break: break-word; }
+    .book-item .book-author { color: #6c757d; font-size: .9rem; }
+    .book-item.read .book-title { text-decoration: line-through; color: #6c757d; }
+    .book-item .delete { background: #dc3545; color: #fff; border: none; border-radius: 4px; padding: .25rem .6rem; cursor: pointer; }
+    .empty-state { text-align: center; color: #6c757d; padding: 1.5rem 0; background: #fff; border-radius: 8px; }
+  </style>
+</head>
+<body>
+
+  <h1>Список книг</h1>
+
+  <div class="card">
+    <div class="row">
+      <input type="text" id="title-input" placeholder="Название книги" autocomplete="off">
+      <input type="text" id="author-input" placeholder="Автор" autocomplete="off">
+      <button type="button" id="add-btn">Добавить</button>
+    </div>
+    <div class="feedback" id="title-feedback"></div>
+    <div class="feedback" id="author-feedback"></div>
+
+    <div class="row">
+      <input type="search" id="search-input" placeholder="Поиск по названию или автору...">
+    </div>
+
+    <div class="filters">
+      <button type="button" class="filter-btn active" data-filter="all">Все</button>
+      <button type="button" class="filter-btn" data-filter="unread">Непрочитанные</button>
+      <button type="button" class="filter-btn" data-filter="read">Прочитанные</button>
+    </div>
+
+    <div class="counters">
+      <span class="badge">Всего: <span id="total-count">0</span></span>
+      <span class="badge unread">Непрочитано: <span id="unread-count">0</span></span>
+      <span class="badge read">Прочитано: <span id="read-count">0</span></span>
+    </div>
+  </div>
+
+  <ul id="book-list"></ul>
+
+  <script>
+    // ============ ДАННЫЕ ============
+    const STORAGE_KEY = 'book-list-items';
+
+    function loadBooks() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved === null) return [];
+      try {
+        const parsed = JSON.parse(saved);
+        if (!Array.isArray(parsed)) return [];
+        return parsed.filter(b =>
+          b && typeof b === 'object' &&
+          typeof b.id === 'string' &&
+          typeof b.title === 'string' &&
+          typeof b.author === 'string' &&
+          typeof b.read === 'boolean'
+        );
+      } catch (e) {
+        console.error('Ошибка чтения книг:', e);
+        return [];
+      }
+    }
+
+    function saveBooks(books) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(books));
+    }
+
+    function addBook(books, title, author) {
+      const next = [...books, {
+        id: Date.now().toString() + Math.random().toString(36).slice(2, 6),
+        title: title.trim(),
+        author: author.trim(),
+        read: false
+      }];
+      saveBooks(next);
+      return next;
+    }
+
+    function removeBook(books, id) {
+      const next = books.filter(b => b.id !== id);
+      saveBooks(next);
+      return next;
+    }
+
+    function toggleBook(books, id) {
+      const next = books.map(b => b.id === id ? { ...b, read: !b.read } : b);
+      saveBooks(next);
+      return next;
+    }
+
+    function filterBooks(books, filter, query) {
+      let r = books;
+      if (filter === 'read') r = r.filter(b => b.read);
+      else if (filter === 'unread') r = r.filter(b => !b.read);
+      const q = query.trim().toLowerCase();
+      if (q) r = r.filter(b =>
+        b.title.toLowerCase().includes(q) ||
+        b.author.toLowerCase().includes(q)
+      );
+      return r;
+    }
+
+    function validateBook(title, author) {
+      const e = {};
+      if (!title.trim()) e.title = 'Введите название книги';
+      else if (title.trim().length < 2) e.title = 'Название слишком короткое';
+      if (!author.trim()) e.author = 'Введите автора';
+      else if (author.trim().length < 2) e.author = 'Имя автора слишком короткое';
+      return Object.keys(e).length ? e : null;
+    }
+
+    // ============ ОТОБРАЖЕНИЕ ============
+    function renderBooks(books, listEl) {
+      listEl.innerHTML = '';
+      if (books.length === 0) {
+        const li = document.createElement('li');
+        li.className = 'empty-state';
+        li.textContent = 'Книг не найдено';
+        listEl.appendChild(li);
+        return;
+      }
+      books.forEach(b => {
+        const li = document.createElement('li');
+        li.className = 'book-item' + (b.read ? ' read' : '');
+        li.dataset.id = b.id;
+
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.className = 'toggle';
+        cb.checked = b.read;
+
+        const info = document.createElement('div');
+        info.className = 'book-info';
+        const t = document.createElement('div');
+        t.className = 'book-title';
+        t.textContent = b.title;
+        const a = document.createElement('div');
+        a.className = 'book-author';
+        a.textContent = b.author;
+        info.append(t, a);
+
+        const del = document.createElement('button');
+        del.type = 'button';
+        del.className = 'delete';
+        del.textContent = 'Удалить';
+
+        li.append(cb, info, del);
+        listEl.appendChild(li);
+      });
+    }
+
+    function renderErrors(errors) {
+      const map = {
+        title: { input: document.getElementById('title-input'), fb: document.getElementById('title-feedback') },
+        author: { input: document.getElementById('author-input'), fb: document.getElementById('author-feedback') }
+      };
+      Object.entries(map).forEach(([key, item]) => {
+        if (errors && errors[key]) {
+          item.input.classList.add('invalid');
+          item.fb.textContent = errors[key];
+        } else {
+          item.input.classList.remove('invalid');
+          item.fb.textContent = '';
+        }
+      });
+    }
+
+    function updateCounters(books) {
+      const total = books.length;
+      const read = books.filter(b => b.read).length;
+      document.getElementById('total-count').textContent = total;
+      document.getElementById('unread-count').textContent = total - read;
+      document.getElementById('read-count').textContent = read;
+    }
+
+    function highlightFilter(buttons, current) {
+      buttons.forEach(btn => btn.classList.toggle('active', btn.dataset.filter === current));
+    }
+
+    // ============ ТОЧКА ВХОДА ============
+    const titleInput = document.getElementById('title-input');
+    const authorInput = document.getElementById('author-input');
+    const searchInput = document.getElementById('search-input');
+    const list = document.getElementById('book-list');
+    const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
+    const addBtn = document.getElementById('add-btn');
+
+    let books = [];
+    let currentFilter = 'all';
+    let currentQuery = '';
+
+    function render() {
+      renderBooks(filterBooks(books, currentFilter, currentQuery), list);
+      updateCounters(books);
+      renderErrors(null);
+    }
+
+    function handleAdd() {
+      const errors = validateBook(titleInput.value, authorInput.value);
+      if (errors) { renderErrors(errors); return; }
+      books = addBook(books, titleInput.value, authorInput.value);
+      titleInput.value = '';
+      authorInput.value = '';
+      renderErrors(null);
+      render();
+      titleInput.focus();
+    }
+
+    addBtn.addEventListener('click', handleAdd);
+
+    // Enter в полях — тоже добавляет, но без перезагрузки страницы
+    [titleInput, authorInput].forEach(inp => {
+      inp.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleAdd();
+        }
+      });
+    });
+
+    list.addEventListener('click', (e) => {
+      const li = e.target.closest('.book-item');
+      if (!li) return;
+      const id = li.dataset.id;
+      if (e.target.classList.contains('toggle')) { books = toggleBook(books, id); render(); }
+      else if (e.target.classList.contains('delete')) { books = removeBook(books, id); render(); }
+    });
+
+    searchInput.addEventListener('input', () => {
+      currentQuery = searchInput.value;
+      render();
+    });
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentFilter = btn.dataset.filter;
+        highlightFilter(filterButtons, currentFilter);
+        render();
+      });
+    });
+
+    books = loadBooks();
+    highlightFilter(filterButtons, currentFilter);
+    render();
+  </script>
+
+</body>
+</html>фф
