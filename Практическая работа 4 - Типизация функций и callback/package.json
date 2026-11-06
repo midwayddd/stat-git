@@ -1,0 +1,13 @@
+{
+  "name": "practice-4-function-callback-types",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Практическая работа по типизации функций и callback в TypeScript",
+  "scripts": {
+    "build": "tsc",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
