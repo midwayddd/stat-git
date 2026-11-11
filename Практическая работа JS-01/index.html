@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Анализатор каталога товаров — практическая работа JS-01">
+  <title>Анализатор каталога товаров</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <main class="container">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="На главную"><span class="brand-mark">S</span><span>STOCK<span class="brand-muted">ROOM</span></span></a>
+      <span class="course-tag">ПРАКТИЧЕСКАЯ РАБОТА <b>JS—01</b></span>
+    </header>
+
+    <section class="hero">
+      <div>
+        <p class="eyebrow"><span class="eyebrow-dot"></span> УПРАВЛЕНИЕ И АНАЛИТИКА</p>
+        <h1>Каталог <span>товаров.</span></h1>
+        <p class="hero-copy">Обзор склада, стоимость запасов и быстрый доступ к каждой позиции — всё в одном месте.</p>
+      </div>
+      <div class="hero-stamp"><span>INVENTORY</span><strong>01</strong><small>LIVE OVERVIEW</small></div>
+    </section>
+
+    <section class="stats-grid" aria-label="Сводка каталога">
+      <article class="stat-card stat-dark"><div class="stat-top"><span>Стоимость склада</span><span class="stat-icon">₽</span></div><strong id="inventory-value">—</strong><small>Общая стоимость всех остатков</small></article>
+      <article class="stat-card"><div class="stat-top"><span>Позиций в каталоге</span><span class="stat-icon">▦</span></div><strong id="product-count">—</strong><small>Уникальные товары</small></article>
+      <article class="stat-card"><div class="stat-top"><span>Единиц на складе</span><span class="stat-icon">⌑</span></div><strong id="units-count">—</strong><small>Суммарное количество</small></article>
+      <article class="stat-card"><div class="stat-top"><span>Самый дорогой товар</span><span class="stat-icon">↗</span></div><strong class="stat-product" id="most-expensive">—</strong><small id="most-expensive-price">По цене за единицу</small></article>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">СПИСОК ПОЗИЦИЙ</p><h2>Товары на складе</h2></div>
+        <span class="result-count" id="result-count">0 товаров</span>
+      </div>
+      <div class="toolbar">
+        <label class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Найти товар..." aria-label="Поиск товара"></label>
+        <label class="select-wrap"><span class="sr-only">Категория</span><select id="category-filter"><option value="all">Все категории</option><option value="electronics">Электроника</option><option value="furniture">Мебель</option></select></label>
+        <label class="select-wrap"><span class="sr-only">Сортировка</span><select id="sort-select"><option value="default">По умолчанию</option><option value="asc">Сначала дешевле</option><option value="desc">Сначала дороже</option></select></label>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ТОВАР</th><th>КАТЕГОРИЯ</th><th>ЦЕНА</th><th>КОЛИЧЕСТВО</th><th>СУММА</th><th></th></tr></thead>
+          <tbody id="products-body"></tbody>
+        </table>
+        <div class="empty-state" id="empty-state" hidden>Ничего не найдено. Попробуйте изменить запрос.</div>
+      </div>
+      <div class="panel-footer"><span><i class="live-dot"></i> Данные обновляются мгновенно</span><span>Каталог · 2026</span></div>
+    </section>
+
+    <section class="bottom-grid">
+      <article class="panel category-panel">
+        <div class="section-heading"><div><p class="eyebrow">РАСПРЕДЕЛЕНИЕ</p><h2>По категориям</h2></div></div>
+        <div id="category-stats" class="category-list"></div>
+      </article>
+      <article class="note-card">
+        <div class="note-icon">↗</div><p class="eyebrow">ИНСТРУМЕНТЫ АНАЛИТИКИ</p>
+        <h2>Порядок<br>в каждой детали.</h2>
+        <p>Изменяйте остатки прямо в таблице. Расчёты и статистика пересчитаются автоматически, а исходный каталог останется нетронутым.</p>
+        <span class="note-line"></span><small>FUNCTIONS · ARRAYS · OBJECTS</small>
+      </article>
+    </section>
+    <footer><span>STOCKROOM <b>JS—01</b></span><span>Учебный проект · JavaScript</span></footer>
+  </main>
+</body>
+</html>
