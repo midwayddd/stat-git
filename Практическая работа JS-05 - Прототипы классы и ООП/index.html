@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Игровая полка — личная коллекция видеоигр">
+  <title>Игровая полка — коллекция</title><link rel="stylesheet" href="style.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <header class="header"><a class="brand" href="#"><span>▣</span> GAME / SHELF</a><span class="header-note">YOUR PERSONAL COLLECTION</span></header>
+  <main class="container">
+    <section class="hero"><p class="eyebrow">ЛИЧНАЯ БИБЛИОТЕКА</p><h1>Твоя игровая<br><em>история.</em></h1><p>Собери любимые миры в одном месте. Следи за прогрессом и возвращайся к тому, что действительно хочется пройти.</p></section>
+    <section class="stats"><div><strong id="stat-total">0</strong><span>в коллекции</span></div><div><strong id="stat-playing">0</strong><span>сейчас играю</span></div><div><strong id="stat-done">0</strong><span>пройдено</span></div></section>
+    <section class="library">
+      <div class="section-title"><div><p class="eyebrow">КОЛЛЕКЦИЯ</p><h2>Моя полка</h2></div><span id="shown-count" class="shown-count">0 записей</span></div>
+      <form id="game-form" class="form">
+        <div class="field"><label for="game-name">Название игры</label><input id="game-name" maxlength="60" placeholder="Например, The Witcher 3" required></div>
+        <div class="field"><label for="game-platform">Платформа</label><select id="game-platform"><option>PC</option><option>PlayStation</option><option>Xbox</option><option>Nintendo Switch</option><option>Другое</option></select></div>
+        <div class="field"><label for="game-genre">Жанр</label><select id="game-genre"><option>Приключение</option><option>RPG</option><option>Экшен</option><option>Стратегия</option><option>Головоломка</option><option>Симулятор</option><option>Другое</option></select></div>
+        <button type="submit" class="add-button">Добавить игру <span>＋</span></button>
+      </form>
+      <p id="message" class="message" role="status" aria-live="polite"></p>
+      <div class="filters"><div id="status-filters"><button class="filter active" type="button" data-status="all">Все</button><button class="filter" type="button" data-status="playing">Играю</button><button class="filter" type="button" data-status="planned">В планах</button><button class="filter" type="button" data-status="completed">Пройдены</button></div><input id="search" type="search" placeholder="Поиск по коллекции..." aria-label="Поиск по коллекции"></div>
+      <div id="game-grid" class="game-grid"></div>
+      <div id="empty" class="empty"><span>▧</span><strong>Полка пока пуста</strong><p>Добавь первую игру, чтобы начать коллекцию.</p></div>
+    </section>
+  </main>
+  <footer><span>GAME / SHELF · JS-05</span><span>СОБСТВЕННАЯ КОЛЛЕКЦИЯ</span></footer>
+</body>
+</html>

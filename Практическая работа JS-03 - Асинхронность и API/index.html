@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Интерактивный каталог стран на основе открытого REST Countries API">
+  <title>Атлас — каталог стран</title>
+  <link rel="preconnect" href="https://restcountries.com">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="#" aria-label="Атлас — на главную"><span class="brand-mark">A</span>АТЛАС<span class="brand-sub"> / МИР В ДАННЫХ</span></a><span class="top-note">ОТКРЫТЫЙ API · REST COUNTRIES</span></header>
+  <main class="shell">
+    <section class="hero">
+      <p class="eyebrow">ИНТЕРАКТИВНЫЙ СПРАВОЧНИК</p>
+      <h1>Мир ближе,<br><em>чем кажется.</em></h1>
+      <p class="intro">Исследуйте страны, сравнивайте регионы и находите новые точки на карте мира.</p>
+      <div class="hero-stats"><div><strong id="total-count">—</strong><span>стран в каталоге</span></div><div><strong>250+</strong><span>точек интереса</span></div><div><strong>LIVE</strong><span>данные из API</span></div></div>
+    </section>
+    <section class="catalog" aria-labelledby="catalog-title">
+      <div class="section-head"><div><p class="eyebrow">БАЗА ДАННЫХ</p><h2 id="catalog-title">Исследовать страны</h2></div><button id="reload" class="ghost-button" type="button">↻ Обновить данные</button></div>
+      <div class="toolbar">
+        <label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Название страны или столица..." autocomplete="off"></label>
+        <label class="select-wrap"><span class="sr-only">Регион</span><select id="region"><option value="all">Все регионы</option><option value="Africa">Африка</option><option value="Americas">Америка</option><option value="Asia">Азия</option><option value="Europe">Европа</option><option value="Oceania">Океания</option><option value="Antarctic">Антарктика</option></select></label>
+        <label class="select-wrap"><span class="sr-only">Сортировка</span><select id="sort"><option value="name">По названию</option><option value="population">По населению</option></select></label>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite">Подготовка к загрузке...</p>
+      <div id="country-grid" class="country-grid" aria-live="polite"></div>
+      <div id="empty" class="empty hidden"><span>⌕</span><h3>Ничего не найдено</h3><p>Попробуйте изменить запрос или выбрать другой регион.</p></div>
+      <div id="error" class="error-panel hidden" role="alert"><strong>Не удалось загрузить каталог</strong><p id="error-message">Проверьте подключение к Интернету и попробуйте ещё раз.</p><button id="retry" class="primary-button" type="button">Повторить запрос</button></div>
+    </section>
+  </main>
+  <footer><span>АТЛАС · УЧЕБНЫЙ ПРОЕКТ JS-03</span><span>Источник данных: REST Countries API</span></footer>
+</body>
+</html>

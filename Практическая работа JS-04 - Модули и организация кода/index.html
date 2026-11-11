@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Планировщик учебных задач Фокус">
+  <title>Фокус — учебный планировщик</title><link rel="stylesheet" href="style.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <main class="app">
+    <header class="header"><a class="logo" href="#">ФОКУС<span>.</span></a><span class="date-label">ЛИЧНОЕ ПРОСТРАНСТВО</span></header>
+    <section class="intro"><p class="eyebrow">ПЛАНИРУЙ · ДЕЛАЙ · ПОВТОРЯЙ</p><h1>Большие цели<br><em>начинаются с малого.</em></h1><p class="sub">Собери задачи в одном месте и двигайся вперёд в собственном темпе.</p></section>
+    <section class="workspace">
+      <form id="task-form" class="add-form">
+        <label for="task-title">Новая задача</label><div class="form-row"><input id="task-title" name="title" maxlength="90" placeholder="Например, повторить тему по JavaScript" required><button type="submit">Добавить <span>＋</span></button></div>
+        <p id="form-message" class="message" role="status" aria-live="polite">До 90 символов. Название должно содержать хотя бы 3 символа.</p>
+      </form>
+      <div class="list-head"><div><p class="eyebrow">МОЙ СПИСОК</p><h2>Задачи на сегодня</h2></div><div class="counter"><strong id="remaining">0</strong><span>осталось</span></div></div>
+      <div class="filters" role="group" aria-label="Фильтр задач"><button class="filter active" data-filter="all" type="button">Все</button><button class="filter" data-filter="active" type="button">В процессе</button><button class="filter" data-filter="done" type="button">Выполненные</button></div>
+      <ul id="task-list" class="task-list"></ul>
+      <div id="empty-state" class="empty"><span>✳</span><strong>Пока здесь чисто</strong><p>Добавь первую задачу — и начни с небольшого шага.</p></div>
+      <footer class="footer"><span id="total">0 задач</span><button id="clear-done" class="clear-button" type="button">Удалить выполненные</button></footer>
+    </section>
+  </main>
+</body>
+</html>

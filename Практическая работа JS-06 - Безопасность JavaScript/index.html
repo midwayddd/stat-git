@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <meta name="description" content="Личные заметки с безопасной обработкой пользовательских данных">
+  <title>Тихое место — заметки</title><link rel="stylesheet" href="style.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <header class="header"><a class="brand" href="#">тихое<span>место</span></a><span class="header-note">ЛИЧНОЕ ПРОСТРАНСТВО · ЛОКАЛЬНОЕ ХРАНЕНИЕ</span></header>
+  <main class="layout">
+    <section class="intro"><p class="eyebrow">ЗАПИСЫВАЙ ВАЖНОЕ</p><h1>Мысли обретают<br><em>форму.</em></h1><p>Небольшое пространство для заметок, идей и планов. Записи остаются в этом браузере.</p><div class="privacy"><span>◈</span><div><strong>Твои данные остаются у тебя</strong><small>Заметки сохраняются локально в браузере.</small></div></div></section>
+    <section class="workspace">
+      <div class="section-head"><div><p class="eyebrow">НОВАЯ ЗАПИСЬ</p><h2>Добавить заметку</h2></div><span class="lock">◈ PRIVATE</span></div>
+      <form id="note-form" novalidate>
+        <label for="note-title">Заголовок</label><input id="note-title" maxlength="60" placeholder="О чём хочется запомнить?" autocomplete="off">
+        <label for="note-body">Текст заметки</label><textarea id="note-body" rows="4" maxlength="500" placeholder="Запиши свою мысль..."></textarea>
+        <div class="form-bottom"><span id="char-count">0 / 500</span><button type="submit">Сохранить заметку <span>↗</span></button></div>
+      </form>
+      <p id="message" class="message" role="status" aria-live="polite">Заголовок: 3–60 символов. Текст: 5–500 символов.</p>
+      <div class="notes-head"><div><p class="eyebrow">АРХИВ</p><h2>Твои заметки <span id="note-count">0</span></h2></div><input id="search" type="search" placeholder="Найти заметку..." aria-label="Поиск заметок"></div>
+      <div id="notes-list" class="notes-list"></div>
+      <div id="empty" class="empty"><span>✳</span><strong>Здесь появятся твои мысли</strong><p>Добавь первую заметку — она сохранится автоматически.</p></div>
+    </section>
+  </main>
+  <footer><span>ТИХОЕ МЕСТО · JS-06</span><span>БЕЗОПАСНОСТЬ НАЧИНАЕТСЯ С ОБРАБОТКИ ДАННЫХ</span></footer>
+</body>
+</html>
